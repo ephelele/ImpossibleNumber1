@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Validation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            color: white;  /* White text on black background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #333;  /* Dark background for the container */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 90%;  /* Make the container responsive */
+            max-width: 400px;
+            text-align: center;
+        }
+        h1 {
+            color: #fff;
+        }
+        input {
+            width: 80%;
+            padding: 8px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            background-color: #222;
+            color: white;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .message {
+            margin-top: 10px;
+            color: red;
+        }
+        .success {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Number Validation</h1>
+    <input type="text" id="numberInput" placeholder="Enter a number">
+    <button onclick="validateNumber()">Submit</button>
+    <p id="message" class="message"></p>
+</div>
+
+<script>
+    document.getElementById('numberInput').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            validateNumber();
+        }
+    });
+
+    function validateNumber() {
+        const input = document.getElementById("numberInput").value;
+        const message = document.getElementById("message");
+        let number1 = parseFloat(input);
+
+        if (isNaN(number1)) {
+            message.textContent = "Please enter a valid number.";
+            message.className = "message";
+            return;
+        }
+
+        if (number1 >= 0) {
+            message.textContent = "Number must be less than 0.";
+            message.className = "message";
+        } else if (Number.isInteger(number1)) {
+            message.textContent = "Number must have a decimal.";
+            message.className = "message";
+        } else if (Math.abs(Math.floor(number1)).toString().length < 3) {
+            message.textContent = "Number must have at least 3 digits before the decimal.";
+            message.className = "message";
+        } else if (input.charAt(input.length - 1) !== '2') {
+            message.textContent = "Number must end with 2.";
+            message.className = "message";
+        } else if (input.split('.')[1].length !== 2) {
+            message.textContent = "Decimal must have exactly 2 digits.";
+            message.className = "message";
+        } else {
+            const decimalPart = input.split('.')[1];
+            const decimalSum = decimalPart.split('').reduce((sum, digit) => sum + parseInt(digit), 0);
+
+            if (decimalSum !== 10) {
+                message.textContent = "The sum of the decimal digits must be 10.";
+                message.className = "message";
+            } else if (Math.abs(Math.floor(number1)) <= -30) {
+                message.textContent = "The integer part before the decimal must be greater than -30.";
+                message.className = "message";
+            } else if (!Math.abs(Math.floor(number1)).toString().includes('8')) {
+                message.textContent = "The integer part before the decimal must contain the digit 8.";
+                message.className = "message";
+            } else {
+                message.textContent = "Awesome! Now come up with a letter.";
+                message.className = "success";
+                setTimeout(() => alert("You're ready to input a letter!"), 1000);
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
+
